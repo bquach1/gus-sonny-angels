@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import MenuIcon from "@mui/icons-material/Menu";
 
 import axios from "axios";
+import Navbar from "../components/navbar";
 
 const Collections = () => {
   const [figures, setFigures] = useState([]);
@@ -25,23 +25,7 @@ const Collections = () => {
 
   return (
     <div className="App">
-      <div
-        style={{
-          padding: 20,
-          fontSize: 40,
-          width: "100%",
-          backgroundColor: "#FFD580",
-          borderBottom: "1px solid black",
-          fontWeight: 600,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          position: "relative",
-        }}
-      >
-        <div>Gus' Sonny Angel Collectors' Log</div>
-        <MenuIcon style={{ position: "absolute", right: 50, fontSize: 50 }} />
-      </div>
+      <Navbar />
       {groupedFigures.length
         ? groupedFigures.map((row, rowIndex) => (
             <div className="figure-row" key={rowIndex}>
