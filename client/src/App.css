@@ -19,39 +19,52 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: 'Montserrat';
 }
 
 .figure-row {
   display: flex;
-  justify-content: space-around; /* Evenly distribute space between cards */
+  justify-content: space-around;
+  /* Evenly distribute space between cards */
   margin-bottom: 20px;
-  width: 100%; /* Ensure rows take full width */
+  width: 100%;
+  /* Ensure rows take full width */
 }
 
 .figure-card {
-  flex: 1 1 30%; /* Each card takes up approximately 30% of the row's width */
-  margin: 10px; /* Margin between cards */
+  flex: 1 1 30%;
+  /* Each card takes up approximately 30% of the row's width */
+  margin: 10px;
+  /* Margin between cards */
   text-align: center;
-  border: 1px solid #ddd; /* Optional: Add a border to each card */
-  border-radius: 4px; /* Optional: Add rounded corners */
-  padding: 10px; /* Padding inside each card */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Optional: Add a subtle shadow */
+  border: 1px solid #ddd;
+  /* Optional: Add a border to each card */
+  border-radius: 4px;
+  /* Optional: Add rounded corners */
+  padding: 10px;
+  /* Padding inside each card */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Optional: Add a subtle shadow */
   position: relative;
 }
 
 .figure-card img {
   max-width: 100%;
   height: auto;
-  border-radius: 4px; /* Optional: Add rounded corners to images */
+  border-radius: 4px;
+  /* Optional: Add rounded corners to images */
 }
 
 .figure-card:hover {
-  transform: scale(1.05); /* Optional: Slightly enlarge the card on hover */
+  transform: scale(1.05);
+  /* Optional: Slightly enlarge the card on hover */
 }
 
 .figure-card p {
-  margin-top: 10px; /* Space between image and caption */
-  font-size: 1rem; /* Adjust the font size of the caption */
+  margin-top: 10px;
+  /* Space between image and caption */
+  font-size: 1rem;
+  /* Adjust the font size of the caption */
 }
 
 .MuiSvgIcon-root {

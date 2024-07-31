@@ -19,8 +19,9 @@ const Navbar = () => {
   return (
     <div
       style={{
-        padding: 20,
         fontSize: 40,
+        paddingTop: 20,
+        paddingBottom: 20,
         width: "100%",
         backgroundColor: "#FFD580",
         borderBottom: "1px solid black",
