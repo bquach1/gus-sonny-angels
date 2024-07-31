@@ -41,9 +41,11 @@ const Collections = () => {
   }, []);
 
   useEffect(() => {
+    const newSeriesList = new Set();
     figures.forEach(figure => {
-      setSeriesList(seriesList.add(figure.series));
+      newSeriesList.add(figure.series);
     });
+    setSeriesList(newSeriesList);
 
     const sortedFigures = [...figures].sort((a, b) => {
       if (a.series < b.series) {
@@ -95,14 +97,19 @@ const Collections = () => {
     setGroupedFigures(newGroupedFigures);
   }, [figures]);
 
-  const headerRefs = useRef([...Array(seriesList.size)].map(() => React.createRef()));
+  // Create a map to store refs with series name as the key
+  const headerRefs = useRef(new Map());
 
   const [seriesSelected, setSeriesSelected] = useState(0);
 
   const handleChange = (event, newValue) => {
     setSeriesSelected(newValue);
+    // Get the series name corresponding to the selected index
+    const seriesName = [...seriesList].sort()[newValue];
     // Scroll to the corresponding header
-    headerRefs[newValue].current.scrollIntoView({ behavior: 'smooth' });
+    if (headerRefs.current.get(seriesName)) {
+      headerRefs.current.get(seriesName).scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -129,7 +136,7 @@ const Collections = () => {
           return (
             <React.Fragment key={rowIndex}>
               {showHeader && (
-                <h3 style={{ paddingTop: 10, paddingBottom: 10 }}>{row[0].series}</h3>
+                <h3 ref={(el) => headerRefs.current.set(row[0].series, el)} style={{ paddingTop: 10, paddingBottom: 10 }}>{row[0].series}</h3>
               )}
               <div className="figure-row">
                 {row.map((figure, index) => (
