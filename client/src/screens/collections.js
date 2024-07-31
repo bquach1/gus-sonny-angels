@@ -3,22 +3,36 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addItem, removeItem, updateItem } from '../actions';
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import styled from 'styled-components';
 
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
+import Fab from '@mui/material/Fab';
 
 import axios from "axios";
 import Navbar from "../components/navbar";
+
+const SeriesTabs = styled(Tabs)`
+  .Mui-selected {
+    font-weight: 900;
+    color: black;
+  }
+`
 
 const Collections = () => {
   const [figures, setFigures] = useState([]);
   const [groupedFigures, setGroupedFigures] = useState([]);
   const [seriesList, setSeriesList] = useState(new Set());
+  const [atTop, setAtTop] = useState(false);
+  const [isSeriesSelected, setIsSeriesSelected] = useState(false);
+  const [topButtonShow, setTopButtonShow] = useState(false);
 
   const items = useSelector((state) => state.items);
   const dispatch = useDispatch();
+
+  const scrollViewRef = useRef(null);
 
   const handleAddItem = (newCaption, newImage) => {
     const newItem = { caption: newCaption, image: newImage };
@@ -38,26 +52,41 @@ const Collections = () => {
     axios.get("http://localhost:3004/figures").then(function (response) {
       setFigures(response.data);
     });
+
+    const handleScroll = () => {
+      if (window.scrollY === 0) {
+        setAtTop(true);
+        setSeriesSelected(null);
+      } else {
+        setAtTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   useEffect(() => {
     const newSeriesList = new Set();
     figures.forEach(figure => {
-      newSeriesList.add(figure.series);
+      newSeriesList.add(figure.series.replace(/^\s+/, ''));
     });
     setSeriesList(newSeriesList);
 
     const sortedFigures = [...figures].sort((a, b) => {
-      if (a.series < b.series) {
+      if (a.series.trim() < b.series.trim()) {
         return -1;
       }
-      if (a.series > b.series) {
+      if (a.series.trim() > b.series.trim()) {
         return 1;
       }
-      if (a.caption < b.caption) {
+      if (a.caption.trim() < b.caption.trim()) {
         return -1;
       }
-      if (a.caption > b.caption) {
+      if (a.caption.trim() > b.caption.trim()) {
         return 1;
       }
       return 0;
@@ -97,26 +126,40 @@ const Collections = () => {
     setGroupedFigures(newGroupedFigures);
   }, [figures]);
 
-  // Create a map to store refs with series name as the key
-  const headerRefs = useRef(new Map());
+  useEffect(() => {
+    if (!atTop && isSeriesSelected) {
+      setTopButtonShow(true);
+    }
+    else {
+      setTopButtonShow(false);
+    }
+  }, [atTop, isSeriesSelected])
 
-  const [seriesSelected, setSeriesSelected] = useState(0);
+  const headerRefs = useRef(new Map());
 
   const handleChange = (event, newValue) => {
     setSeriesSelected(newValue);
-    // Get the series name corresponding to the selected index
     const seriesName = [...seriesList].sort()[newValue];
-    // Scroll to the corresponding header
     if (headerRefs.current.get(seriesName)) {
+      setIsSeriesSelected(true);
       headerRefs.current.get(seriesName).scrollIntoView({ behavior: 'smooth' });
     }
   };
 
+  const handleBackToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  const [seriesSelected, setSeriesSelected] = useState(0);
+
   return (
-    <div className="App">
+    <div className="App" ref={scrollViewRef}>
       <Navbar />
       <Box sx={{ width: '100%', display: 'flex', flexWrap: 'wrap' }}>
-        <Tabs
+        <SeriesTabs
           style={{ width: "100%", display: "flex" }}
           value={seriesSelected}
           onChange={handleChange}
@@ -125,10 +168,10 @@ const Collections = () => {
         >
           {[...seriesList].sort().map((series, index) => {
             return (
-              <Tab label={series} key={`${series}-${index}`} />
+              <Tab style={{ textTransform: "none", }} label={series} key={`${series}-${index}`} />
             )
           })}
-        </Tabs>
+        </SeriesTabs>
       </Box>
       {groupedFigures.length
         ? groupedFigures.map((row, rowIndex) => {
@@ -159,6 +202,10 @@ const Collections = () => {
           );
         })
         : null}
+      {topButtonShow && <Fab variant="extended" style={{ position: "fixed", bottom: 50, right: 50, opacity: 0.5 }} onClick={() => handleBackToTop()}>
+        <ArrowUpwardIcon />
+        Back to Top
+      </Fab>}
     </div>
   );
 };
