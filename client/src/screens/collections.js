@@ -81,7 +81,7 @@ const Collections = () => {
   };
 
   useEffect(() => {
-    axios.get("http://localhost:3004/figures").then(function (response) {
+    axios.get("https://gus-sonny-angels-backend.onrender.com/figures").then(function (response) {
       setFigures(response.data);
     });
 
