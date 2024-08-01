@@ -1,9 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { addItem, removeItem, updateItem } from '../actions';
+import { addItem, addWishlist, removeItem, removeWishlist } from '../actions';
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import TocIcon from '@mui/icons-material/Toc';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
 import styled from 'styled-components';
 
 import Box from '@mui/material/Box';
@@ -21,6 +25,18 @@ const SeriesTabs = styled(Tabs)`
   }
 `
 
+const FigureDial = styled(SpeedDial)`
+  .MuiSpeedDial-fab {
+    width: 40px;
+    height: 40px;
+  }
+`
+
+const actions = [
+  { icon: <AddCircleOutlineIcon />, name: 'Add' },
+  { icon: <TocIcon />, name: 'Want' },
+];
+
 const Collections = () => {
   const [figures, setFigures] = useState([]);
   const [groupedFigures, setGroupedFigures] = useState([]);
@@ -29,23 +45,28 @@ const Collections = () => {
   const [isSeriesSelected, setIsSeriesSelected] = useState(false);
   const [topButtonShow, setTopButtonShow] = useState(false);
 
-  const items = useSelector((state) => state.items);
+  const items = useSelector((state) => state.items);  
+
   const dispatch = useDispatch();
 
   const scrollViewRef = useRef(null);
 
   const handleAddItem = (newCaption, newImage) => {
     const newItem = { caption: newCaption, image: newImage };
-    dispatch(addItem(newItem));
+    console.log(dispatch(addItem(newItem)));
   };
 
   const handleRemoveItem = (index) => {
     dispatch(removeItem(index));
   };
 
-  const handleUpdateItem = (index) => {
-    const updatedItem = { caption: 'Updated Caption', image: 'updatedImage.jpg' };
-    dispatch(updateItem(index, updatedItem));
+  const handleAddWishlistItem = (newCaption, newImage) => {
+    const newWishlistItem = { caption: newCaption, image: newImage };
+    dispatch(addWishlist(newWishlistItem));
+  };
+
+  const handleRemoveWishlistItem = (index) => {
+    dispatch(removeItem(index));
   };
 
   useEffect(() => {
@@ -56,7 +77,7 @@ const Collections = () => {
     const handleScroll = () => {
       if (window.scrollY === 0) {
         setAtTop(true);
-        setSeriesSelected(null);
+        setSeriesSelected(0);
       } else {
         setAtTop(false);
       }
@@ -187,14 +208,29 @@ const Collections = () => {
                     {items.items.some(item => item.caption === figure.caption) &&
                       <CheckCircleIcon
                         style={{ position: "absolute", top: 10, left: 10, color: "#90ee90" }}
-                        onClick={() => handleAddItem(figure.caption, figure.image)}
+                        onClick={() => console.log(index)}
                       />}
                     <img src={figure.image} alt={`Sonny Angel figure ${index}`} />
                     <p>{figure.caption}</p>
-                    <AddCircleOutlineIcon
-                      style={{ position: "absolute", top: 10, right: 10 }}
-                      onClick={() => handleAddItem(figure.caption, figure.image)}
-                    />
+                    <FigureDial
+                      ariaLabel="SpeedDial basic example"
+                      sx={{ position: "absolute", top: 10, right: 20, fontSize: 20 }}
+                      icon={<SpeedDialIcon />}
+                      direction="left"
+                    >
+                      {actions.map((action) => (
+                        <SpeedDialAction
+                          key={action.name}
+                          icon={action.icon}
+                          tooltipTitle={action.name}
+                          onClick={() => {
+                            action.name === "Add" ? handleAddItem(figure.caption, figure.image)
+                              : action.name === "Want" ? handleAddWishlistItem(figure.caption, figure.image)
+                                : console.log("Invalid action");
+                          }}
+                        />
+                      ))}
+                    </FigureDial>
                   </div>
                 ))}
               </div>
