@@ -9,7 +9,7 @@ const Profile = () => {
 
     return (
         <div>
-            <Navbar />
+            <Navbar />            
             <div style={{ display: "flex", flexDirection: "column", margin: "0 auto", alignItems: "center", backgroundColor: "#ADD8E6", width: "50%", marginTop: "15%", padding: 50, borderRadius: 10, border: "2px solid black" }}>
                 <span style={{ fontSize: 30, fontWeight: 600, }}>Personal Stats</span>
                 <span>Total Collected Sonny Angels: {items.length}</span>

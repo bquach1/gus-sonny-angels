@@ -14,7 +14,7 @@ const itemsReducer = (state = initialState, action) => {
         case REMOVE_ITEM:
             return {
                 ...state,
-                items: state.items.filter((_, index) => index !== action.payload)
+                items: state.items.filter((item) => (item.rowIndex !== action.payload[0] || item.index !== action.payload[1]))
             };
         case UPDATE_ITEM:
             return {

@@ -7,9 +7,9 @@ export const addItem = (item) => ({
   payload: item
 });
 
-export const removeItem = (index) => ({
+export const removeItem = (item) => ({
   type: REMOVE_ITEM,
-  payload: index
+  payload: item
 });
 
 export const updateItem = (index, newItem) => ({

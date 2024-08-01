@@ -1,14 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { addItem, addWishlist, removeItem, removeWishlist } from '../actions';
+import styled from 'styled-components';
+
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import TocIcon from '@mui/icons-material/Toc';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import CheckCircleIcon from '@mui/icons-material/CheckCircleOutline';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
-import styled from 'styled-components';
 
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
@@ -30,6 +32,15 @@ const FigureDial = styled(SpeedDial)`
     width: 40px;
     height: 40px;
   }
+
+  .MuiFab-primary {
+    color: ${props => props.selected ? "white" : "auto"};
+    background-color: ${props => props.selected ? "#90EE90" : "auto"};
+
+    &:hover {
+      background-color: ${props => props.selected ? "#90EE90" : "auto"}
+    }
+  }
 `
 
 const actions = [
@@ -45,19 +56,19 @@ const Collections = () => {
   const [isSeriesSelected, setIsSeriesSelected] = useState(false);
   const [topButtonShow, setTopButtonShow] = useState(false);
 
-  const items = useSelector((state) => state.items);  
+  const items = useSelector((state) => state.items);
 
   const dispatch = useDispatch();
 
   const scrollViewRef = useRef(null);
 
-  const handleAddItem = (newCaption, newImage) => {
-    const newItem = { caption: newCaption, image: newImage };
-    console.log(dispatch(addItem(newItem)));
+  const handleAddItem = (newCaption, newImage, rowIndex, index) => {
+    const newItem = { caption: newCaption, image: newImage, rowIndex: rowIndex, index: index, };
+    dispatch(addItem(newItem));
   };
 
-  const handleRemoveItem = (index) => {
-    dispatch(removeItem(index));
+  const handleRemoveItem = ({ rowIndex, index }) => {
+    dispatch(removeItem([rowIndex, index]));
   };
 
   const handleAddWishlistItem = (newCaption, newImage) => {
@@ -205,18 +216,19 @@ const Collections = () => {
               <div className="figure-row">
                 {row.map((figure, index) => (
                   <div className="figure-card" key={index}>
-                    {items.items.some(item => item.caption === figure.caption) &&
-                      <CheckCircleIcon
-                        style={{ position: "absolute", top: 10, left: 10, color: "#90ee90" }}
-                        onClick={() => console.log(index)}
+                    {items.items.some(item => item.caption === figure.caption && item.image === figure.image) &&
+                      <RemoveCircleIcon
+                        style={{ position: "absolute", top: 20, left: 10, color: "#FFCCCB" }}
+                        onClick={() => handleRemoveItem({ rowIndex, index })}
                       />}
                     <img src={figure.image} alt={`Sonny Angel figure ${index}`} />
                     <p>{figure.caption}</p>
                     <FigureDial
                       ariaLabel="SpeedDial basic example"
                       sx={{ position: "absolute", top: 10, right: 20, fontSize: 20 }}
-                      icon={<SpeedDialIcon />}
+                      icon={items.items.some((item) => item.rowIndex === rowIndex && item.index === index) ? <CheckCircleIcon style={{ backgroundColor: "#90EE90" }} /> : <SpeedDialIcon />}
                       direction="left"
+                      selected={items.items.some((item) => item.rowIndex === rowIndex && item.index === index)}
                     >
                       {actions.map((action) => (
                         <SpeedDialAction
@@ -224,7 +236,7 @@ const Collections = () => {
                           icon={action.icon}
                           tooltipTitle={action.name}
                           onClick={() => {
-                            action.name === "Add" ? handleAddItem(figure.caption, figure.image)
+                            action.name === "Add" ? handleAddItem(figure.caption, figure.image, rowIndex, index)
                               : action.name === "Want" ? handleAddWishlistItem(figure.caption, figure.image)
                                 : console.log("Invalid action");
                           }}
