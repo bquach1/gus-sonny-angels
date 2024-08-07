@@ -3,8 +3,16 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Menu, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
-const Navbar = () => {
+const ProfileImage = styled.img`
+  &:hover {
+    opacity: 0.7;
+    cursor: pointer;
+  }
+`
+
+const Navbar = ({ profileImage }) => {
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -32,14 +40,30 @@ const Navbar = () => {
         position: "relative",
       }}
     >
-      <AccountCircleIcon
-        style={{ position: "absolute", left: 50, fontSize: 50 }}
-        onClick={() => navigate("/profile")}
-      />
+      {profileImage ? (
+        <ProfileImage
+          style={{
+            position: "absolute",
+            left: 50,
+            fontSize: 50,
+            width: 50,
+            height: 50,
+            borderRadius: "100%",
+          }}
+          src={profileImage}
+          alt="Profile icon"
+          onClick={() => navigate("/profile")}
+        />
+      ) : (
+        <AccountCircleIcon
+          style={{ position: "absolute", left: 50, fontSize: 50 }}
+          onClick={() => navigate("/profile")}
+        />
+      )}
       <div>Gus' Sonny Angel Collectors' Log</div>
       <MenuIcon
         style={{ position: "absolute", right: 50, fontSize: 50 }}
-        onClick={(handleClick)}
+        onClick={handleClick}
       />
       <Menu
         id="basic-menu"

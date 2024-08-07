@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import Navbar from "../components/navbar";
 import { useSelector, useDispatch } from 'react-redux';
 import StarsIcon from '@mui/icons-material/Stars';
 import { addFavorite } from '../actions';
@@ -18,7 +17,6 @@ const MyAngels = () => {
 
   return (
     <div>
-      <Navbar />
       <div style={{ display: "flex", flexDirection: "column", margin: "0 auto", alignItems: "center" }}>
         <h2 style={{ padding: 10 }}>Current Sonny Angels</h2>
         <div>
