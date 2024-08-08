@@ -1,9 +1,15 @@
 import requests
 from bs4 import BeautifulSoup
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+from flask_pymongo import MongoClient
 from flask_cors import CORS
 
 app = Flask(__name__)
+
+client = MongoClient("mongodb+srv://bquach:Rqxo864378!@sonnyangelcluster.79eqgly.mongodb.net/")
+
+db = client["figures"]
+collection = db["items"]
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -67,6 +73,12 @@ def fetch_figures():
                 current_figure["caption"] = normalized_caption
                 figures.append(current_figure)
     return jsonify(figures)
+
+@app.route("/addFigures", methods=["GET", "POST"])
+def add_figures():
+    data = request.json
+    collection.insert_one(data)
+    return jsonify(message="Data added successfully"), 201
 
 if __name__ == "__main__":
     app.run(debug=True, port=3004)
