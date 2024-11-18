@@ -68,7 +68,6 @@ soupsieve==2.5
 SpeechRecognition==3.8.1
 SQLAlchemy==2.0.31
 tenacity==8.5.0
-textract==1.6.5
 tiktoken==0.7.0
 tqdm==4.66.4
 typing-inspect==0.9.0
