@@ -1,0 +1,6 @@
+server/windows_venv3.12
+server/__pycache__
+server/venv
+.DS_Store
+.env
+.gitignore

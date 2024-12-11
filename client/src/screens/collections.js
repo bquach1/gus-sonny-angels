@@ -21,7 +21,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircleOutline";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 import axios from "axios";
-import { PROD_BACKEND_URL } from "../constants";
+import { PROD_DB_URL } from "../constants";
 
 const SeriesTabs = styled(Tabs)`
   .Mui-selected {
@@ -76,7 +76,7 @@ const Collections = () => {
     dispatch(addItem(newItem));
 
     axios
-      .post(`${PROD_BACKEND_URL}/addFigures`, {
+      .post(`${PROD_DB_URL}/addFigures`, {
         newCaption: newCaption,
         newImage: newImage,
       })
@@ -102,8 +102,7 @@ const Collections = () => {
   };
 
   useEffect(() => {
-    // axios.get("https://gus-sonny-angels-backend.onrender.com/figures").then(function (response) {
-    axios.get(`${PROD_BACKEND_URL}/figures`).then(function (response) {
+    axios.get(`${PROD_DB_URL}/figures`).then(function (response) {
       setFigures(response.data);
       setLoaded(true);
     });
