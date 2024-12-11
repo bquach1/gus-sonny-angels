@@ -10,7 +10,7 @@ const ProfileImage = styled.img`
     opacity: 0.7;
     cursor: pointer;
   }
-`
+`;
 
 const Navbar = ({ profileImage }) => {
   const navigate = useNavigate();
@@ -60,7 +60,7 @@ const Navbar = ({ profileImage }) => {
           onClick={() => navigate("/profile")}
         />
       )}
-      <div>Gus' Sonny Angel Collectors' Log</div>
+      <div>Gus' Sonny Angel Log</div>
       <MenuIcon
         style={{ position: "absolute", right: 50, fontSize: 50 }}
         onClick={handleClick}
