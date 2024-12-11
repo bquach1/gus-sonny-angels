@@ -21,6 +21,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircleOutline";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 import axios from "axios";
+import { PROD_BACKEND_URL } from "../constants";
 
 const SeriesTabs = styled(Tabs)`
   .Mui-selected {
@@ -75,7 +76,7 @@ const Collections = () => {
     dispatch(addItem(newItem));
 
     axios
-      .post("http://localhost:3004/addFigures", {
+      .post(`${PROD_BACKEND_URL}/addFigures`, {
         newCaption: newCaption,
         newImage: newImage,
       })
@@ -102,7 +103,7 @@ const Collections = () => {
 
   useEffect(() => {
     // axios.get("https://gus-sonny-angels-backend.onrender.com/figures").then(function (response) {
-    axios.get("http://localhost:3004/figures").then(function (response) {
+    axios.get(`${PROD_BACKEND_URL}/figures`).then(function (response) {
       setFigures(response.data);
       setLoaded(true);
     });
@@ -209,7 +210,7 @@ const Collections = () => {
   const [seriesSelected, setSeriesSelected] = useState(0);
 
   return (
-    <div className="App" ref={scrollViewRef}>      
+    <div className="App" ref={scrollViewRef}>
       {!loaded ? (
         <div
           style={{

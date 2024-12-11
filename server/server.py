@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from flask import Flask, jsonify
 from flask_cors import CORS
+from helpers import check_weird_caps
 
 app = Flask(__name__)
 
@@ -21,18 +22,6 @@ final_response = ""
 for url in url_list:
     final_response += requests.get(url, headers=headers).text
 soup = BeautifulSoup(final_response, 'html.parser')
-
-def check_weird_caps(s):
-    if ' ' in s:
-        return s
-    
-    new_string = [s[0]]
-    for char in s[1:]:
-        if char.isupper():
-            new_string.append(' ')
-        new_string.append(char)
-    
-    return ''.join(new_string)
 
 @app.route("/figures", methods=["GET"])
 def fetch_figures():
