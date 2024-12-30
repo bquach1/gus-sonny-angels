@@ -11,7 +11,6 @@ import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Fab from "@mui/material/Fab";
-import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -76,10 +75,18 @@ const Collections = () => {
     dispatch(addItem(newItem));
 
     axios
-      .post(`${PROD_DB_URL}/addFigures`, {
-        newCaption: newCaption,
-        newImage: newImage,
-      })
+      .post(
+        `${PROD_DB_URL}/add_figures`,
+        {
+          newCaption: newCaption,
+          newImage: newImage,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
         console.log(response.data);
       })
@@ -102,7 +109,6 @@ const Collections = () => {
   };
 
   useEffect(() => {
-    // axios.get("https://gus-sonny-angels-backend.onrender.com/figures").then(function (response) {
     axios.get(`${PROD_DB_URL}/figures`).then(function (response) {
       setFigures(response.data);
       setLoaded(true);
