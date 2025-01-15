@@ -20,7 +20,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircleOutline";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 import axios from "axios";
-import { PROD_DB_URL } from "../constants";
+import { DEV_DB_URL, PROD_DB_URL } from "../constants";
 
 const SeriesTabs = styled(Tabs)`
   .Mui-selected {
@@ -76,10 +76,10 @@ const Collections = () => {
 
     axios
       .post(
-        `${PROD_DB_URL}/add_figures`,
+        `${DEV_DB_URL}/add_figures`,
         {
-          newCaption: newCaption,
-          newImage: newImage,
+          caption: newCaption,
+          image: newImage,
         },
         {
           headers: {
@@ -109,7 +109,7 @@ const Collections = () => {
   };
 
   useEffect(() => {
-    axios.get(`${PROD_DB_URL}/figures`).then(function (response) {
+    axios.get(`${DEV_DB_URL}/figures`).then(function (response) {
       setFigures(response.data);
       setLoaded(true);
     });
@@ -259,7 +259,7 @@ const Collections = () => {
                   rowIndex === 0 ||
                   row[0].series !== groupedFigures[rowIndex - 1][0].series;
                 return (
-                  <React.Fragment key={rowIndex}>
+                  <div style={{ width: "90%" }} key={rowIndex}>
                     {showHeader && (
                       <h3
                         ref={(el) => headerRefs.current.set(row[0].series, el)}
@@ -347,7 +347,7 @@ const Collections = () => {
                         </div>
                       ))}
                     </div>
-                  </React.Fragment>
+                  </div>
                 );
               })
             : null}
