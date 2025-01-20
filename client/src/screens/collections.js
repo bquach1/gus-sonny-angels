@@ -50,7 +50,7 @@ const actions = [
   { icon: <TocIcon />, name: "Want" },
 ];
 
-const Collections = () => {
+const Collections = ({ email }) => {
   const [figures, setFigures] = useState([]);
   const [groupedFigures, setGroupedFigures] = useState([]);
   const [seriesList, setSeriesList] = useState(new Set());
@@ -78,6 +78,7 @@ const Collections = () => {
       .post(
         `${DEV_DB_URL}/add_figures`,
         {
+          email: email,
           caption: newCaption,
           image: newImage,
         },

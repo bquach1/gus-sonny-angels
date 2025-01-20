@@ -93,6 +93,13 @@ def add_figures():
 
     return jsonify({"message": "Figures added to the database successfully."}), 201
 
+@app.route("/get_figures", methods=["GET"])
+def get_figures_by_email():
+    email = request.args.get("email")
+    figures = collection.find({"email": email})
+
+    print(figures)
+    return jsonify({"figures": list(figures)})
 
 if __name__ == "__main__":
     app.run(debug=True, port=3004)

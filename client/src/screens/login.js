@@ -9,6 +9,7 @@ const Login = ({
   handleFirstNameChange,
   handleLastNameChange,
   handleProfileImageChange,
+  handleEmailChange,
 }) => {
   const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -25,8 +26,7 @@ const Login = ({
     localStorage.setItem("token", response.credential);
     const jwtInfo = jwtDecode(response.credential);
 
-    console.log(jwtInfo);
-
+    handleEmailChange(jwtInfo.email);
     handleFirstNameChange(jwtInfo.givenName);
     handleLastNameChange(jwtInfo.familyName);
     handleProfileImageChange(jwtInfo.picture);

@@ -14,12 +14,13 @@ function App() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [profileImage, setProfileImage] = useState("");
+  const [email, setEmail] = useState("");
 
   return (
     <div>
       <Navbar profileImage={profileImage} />
       <Routes>
-        <Route path="/" element={<Collections />} />
+        <Route path="/" element={<Collections email={email} />} />
         <Route path="/list" element={<MyAngels />} />
         <Route
           path="/profile"
@@ -40,6 +41,7 @@ function App() {
               handleFirstNameChange={setFirstName}
               handleLastNameChange={setLastName}
               handleProfileImageChange={setProfileImage}
+              handleEmailChange={setEmail}
             />
           }
         />
